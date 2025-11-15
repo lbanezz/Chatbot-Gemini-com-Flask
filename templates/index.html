@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot Gemini - Flask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<button id="toggle-theme">🌙</button>
+
+<div id="chat">
+    <h2>🤖 Chatbot Darknet</h2>
+
+    <div id="messages"></div>
+
+    <input id="input" type="text" placeholder="Digite sua mensagem..." />
+    <button onclick="enviar()">Enviar</button>
+</div>
+
+<script>
+// =============================
+// 🌙 Tema automático do sistema
+// =============================
+function aplicarTema(tema) {
+    document.documentElement.setAttribute("data-theme", tema);
+    document.getElementById("toggle-theme").textContent = tema === "dark" ? "☀️" : "🌙";
+}
+
+// Detecta tema do computador
+if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    aplicarTema("dark");
+} else {
+    aplicarTema("light");
+}
+
+// =============================
+// Botão para alternar manualmente
+// =============================
+document.getElementById("toggle-theme").addEventListener("click", () => {
+    const temaAtual = document.documentElement.getAttribute("data-theme");
+    aplicarTema(temaAtual === "dark" ? "light" : "dark");
+});
+
+
+// =============================
+// Função de enviar mensagem
+// =============================
+async function enviar() {
+    const msg = document.getElementById("input").value;
+    if (!msg) return;
+
+    document.getElementById("messages").innerHTML += 
+        `<div class='msg user'>Você: ${msg}</div>`;
+
+    const resposta = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensagem: msg })
+    });
+
+    const data = await resposta.json();
+
+    document.getElementById("messages").innerHTML += 
+        `<div class='msg bot'>Gemini: ${data.resposta}</div>`;
+
+    document.getElementById("input").value = "";
+}
+</script>
+
+</body>
+</html>
