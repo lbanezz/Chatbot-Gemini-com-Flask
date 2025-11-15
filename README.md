@@ -20,7 +20,7 @@ Este projeto permite que qualquer pessoa rode um chatbot usando a API oficial da
 
 ## 📷 Preview da Interface
 
-<img src="Chatbot.png" alt="Chatbot" width="350">
+<img src="Chatbot.PNG" alt="Chatbot" width="350">
 
 ---
 
